@@ -1,6 +1,8 @@
 from rest_framework import serializers
-
+from django.contrib.auth.models import User
 from .models import Flight, Booking
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 
 class FlightSerializer(serializers.ModelSerializer):
@@ -26,3 +28,48 @@ class UpdateBookingSerializer(serializers.ModelSerializer):
 		model = Booking
 		fields = ['date', 'passengers']
 
+class UserCreateSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = ['username', 'password']
+
+class UserCreateSerializer(serializers.ModelSerializer):
+	password = serializers.CharField(write_only=True)
+	class Meta:
+		model = User
+		fields = ['username', 'password']
+
+class UserCreateSerializer(serializers.ModelSerializer):
+	password = serializers.CharField(write_only=True)
+	class Meta:
+		model = User
+		fields = ['username', 'password']
+
+	def create(self, validated_data):
+		username = validated_data['username']
+		password = validated_data['password']
+		new_user = User(username=username)
+		new_user.set_password(password)
+		new_user.save()
+		return validated_data
+
+
+class RegisterSerializer(serializers.Serializer):
+	password = serializers.CharField(write_only=True)
+	class Meta:
+		model = User
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'first_name', 'last_name']
+
+    def create(self, validated_data):
+        username = validated_data['username']
+        password = validated_data['password']
+        first_name = validated_data['first_name']
+        last_name = validated_data['last_name']
+        new_user = User(username=username, first_name=first_name, last_name=last_name)
+        new_user.set_password(password)
+        new_user.save()
+        return validated_data

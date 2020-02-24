@@ -1,8 +1,25 @@
-from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView, DestroyAPIView, CreateAPIView
+from rest_framework.generics import(
+ ListAPIView,
+ RetrieveAPIView,
+ RetrieveUpdateAPIView,
+ DestroyAPIView,
+ CreateAPIView,
+ )
 from datetime import datetime
 
 from .models import Flight, Booking
-from .serializers import FlightSerializer, BookingSerializer, BookingDetailsSerializer, UpdateBookingSerializer
+from .serializers import(
+FlightSerializer,
+BookingSerializer,
+BookingDetailsSerializer,
+UpdateBookingSerializer,
+RegisterSerializer,
+UserCreateSerializer,
+)
+
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
 
 
 class FlightsList(ListAPIView):
@@ -21,6 +38,9 @@ class BookingDetails(RetrieveAPIView):
 	lookup_field = 'id'
 	lookup_url_kwarg = 'booking_id'
 
+
+class UserCreateAPIView(CreateAPIView):
+    serializer_class = UserCreateSerializer
 
 class UpdateBooking(RetrieveUpdateAPIView):
 	queryset = Booking.objects.all()
@@ -41,3 +61,6 @@ class BookFlight(CreateAPIView):
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user, flight_id=self.kwargs['flight_id'])
 
+
+class Register(CreateAPIView):
+		serializer_class = RegisterSerializer
